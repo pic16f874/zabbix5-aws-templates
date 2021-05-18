@@ -3,8 +3,8 @@
 This is a template and script that will allow you to monitor ECS clusters and their services in Zabbix.
 
 This started from datorama's and Pahanda's monitoring scripts and templates:
-https://github.com/Pahanda/zabbix-templates-ecs
-https://github.com/datorama/zabbix_rds_template
+ https://github.com/Pahanda/zabbix-templates-ecs
+ https://github.com/datorama/zabbix_rds_template
 
 Changes:
 changes related zabbix5 and python3
