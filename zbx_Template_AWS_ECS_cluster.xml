@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>5.0</version>
+    <date>2021-05-19T10:17:35Z</date>
+    <groups>
+        <group>
+            <name>Templates</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>Template AWS ECS cluster</template>
+            <name>Template AWS ECS cluster</name>
+            <groups>
+                <group>
+                    <name>Templates</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>ECS</name>
+                </application>
+            </applications>
+            <items>
+                <item>
+                    <name>Total Cluster CPU Reservation</name>
+                    <type>EXTERNAL</type>
+                    <key>ecs_stats.py[&quot;--metric&quot;,&quot;CPUReservation&quot;,&quot;--cluster-name&quot;,&quot;{$AWS_CLUSTER_NAME}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$REGION}&quot;]</key>
+                    <delay>2m</delay>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <applications>
+                        <application>
+                            <name>ECS</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>Total Cluster CPU Utilization</name>
+                    <type>EXTERNAL</type>
+                    <key>ecs_stats.py[&quot;--metric&quot;,&quot;CPUUtilization&quot;,&quot;--cluster-name&quot;,&quot;{$AWS_CLUSTER_NAME}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$REGION}&quot;]</key>
+                    <delay>2m</delay>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <applications>
+                        <application>
+                            <name>ECS</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;70</expression>
+                            <name>ECS cluster {$AWS_CLUSTER_NAME} CPU Utilization &gt; 70%</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;80</expression>
+                            <name>ECS cluster {$AWS_CLUSTER_NAME} CPU Utilization &gt; 80%</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;90</expression>
+                            <name>ECS cluster {$AWS_CLUSTER_NAME} CPU Utilization &gt; 90%</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>Total Cluster RAM Reservation</name>
+                    <type>EXTERNAL</type>
+                    <key>ecs_stats.py[&quot;--metric&quot;,&quot;MemoryReservation&quot;,&quot;--cluster-name&quot;,&quot;{$AWS_CLUSTER_NAME}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$REGION}&quot;]</key>
+                    <delay>2m</delay>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <applications>
+                        <application>
+                            <name>ECS</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>Total Cluster RAM Utilization</name>
+                    <type>EXTERNAL</type>
+                    <key>ecs_stats.py[&quot;--metric&quot;,&quot;MemoryUtilization&quot;,&quot;--cluster-name&quot;,&quot;{$AWS_CLUSTER_NAME}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$REGION}&quot;]</key>
+                    <delay>2m</delay>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <applications>
+                        <application>
+                            <name>ECS</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;85 and&#13;
+{last()}&lt;90</expression>
+                            <name>ECS cluster {$AWS_CLUSTER_NAME} RAM Utilization &gt; 85%</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;90 and&#13;
+{last()}&lt;95</expression>
+                            <name>ECS cluster {$AWS_CLUSTER_NAME} RAM Utilization &gt; 90%</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;95</expression>
+                            <name>ECS cluster {$AWS_CLUSTER_NAME} RAM Utilization &gt; 95%</name>
+                            <priority>DISASTER</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>ServiceCount</name>
+                    <type>EXTERNAL</type>
+                    <key>ecs_stats.py[&quot;--metric&quot;,&quot;ServiceCount&quot;,&quot;--cluster-name&quot;,&quot;{$AWS_CLUSTER_NAME}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$REGION}&quot;]</key>
+                    <delay>2m</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <applications>
+                        <application>
+                            <name>ECS</name>
+                        </application>
+                    </applications>
+                </item>
+            </items>
+            <discovery_rules>
+                <discovery_rule>
+                    <name>ECS Service Discovery</name>
+                    <type>EXTERNAL</type>
+                    <key>ecs_stats.py[&quot;--cluster-name&quot;,&quot;{$AWS_CLUSTER_NAME}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$REGION}&quot;,&quot;--discover&quot;]</key>
+                    <delay>1h</delay>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>Service CPU Utilization for {#SERVICE}</name>
+                            <type>EXTERNAL</type>
+                            <key>ecs_stats.py[&quot;--metric&quot;,&quot;CPUUtilization&quot;,&quot;--service-name&quot;,&quot;{#SERVICE}&quot;,&quot;--cluster-name&quot;,&quot;{$AWS_CLUSTER_NAME}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$REGION}&quot;]</key>
+                            <delay>60s</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>%</units>
+                            <applications>
+                                <application>
+                                    <name>ECS</name>
+                                </application>
+                            </applications>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{last()}&gt;80</expression>
+                                    <name>ECS service {$AWS_CLUSTER_NAME}.{#SERVICE} CPU Utilization &gt; 80%</name>
+                                    <priority>AVERAGE</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Service Memory Utilization for {#SERVICE}</name>
+                            <type>EXTERNAL</type>
+                            <key>ecs_stats.py[&quot;--metric&quot;,&quot;MemoryUtilization&quot;,&quot;--service-name&quot;,&quot;{#SERVICE}&quot;,&quot;--cluster-name&quot;,&quot;{$AWS_CLUSTER_NAME}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$REGION}&quot;]</key>
+                            <delay>60s</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>%</units>
+                            <applications>
+                                <application>
+                                    <name>ECS</name>
+                                </application>
+                            </applications>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{last()}&gt;80 and {last()}&lt;90</expression>
+                                    <name>ECS service {$AWS_CLUSTER_NAME}.{#SERVICE} RAM Utilization &gt; 80%</name>
+                                    <priority>AVERAGE</priority>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <expression>{last()}&gt;90 and {last()}&lt;95</expression>
+                                    <name>ECS service {$AWS_CLUSTER_NAME}.{#SERVICE} RAM Utilization &gt; 90%</name>
+                                    <priority>HIGH</priority>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <expression>{last()}&gt;95</expression>
+                                    <name>ECS service {$AWS_CLUSTER_NAME}.{#SERVICE} RAM Utilization &gt; 95%</name>
+                                    <priority>DISASTER</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                    </item_prototypes>
+                    <graph_prototypes>
+                        <graph_prototype>
+                            <name>Service CPU Utilization for {#SERVICE}</name>
+                            <ymin_type_1>FIXED</ymin_type_1>
+                            <graph_items>
+                                <graph_item>
+                                    <drawtype>BOLD_LINE</drawtype>
+                                    <color>199C0D</color>
+                                    <item>
+                                        <host>Template AWS ECS cluster</host>
+                                        <key>ecs_stats.py[&quot;--metric&quot;,&quot;CPUUtilization&quot;,&quot;--service-name&quot;,&quot;{#SERVICE}&quot;,&quot;--cluster-name&quot;,&quot;{$AWS_CLUSTER_NAME}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$REGION}&quot;]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                        <graph_prototype>
+                            <name>Service RAM Utilization for {#SERVICE}</name>
+                            <ymin_type_1>FIXED</ymin_type_1>
+                            <graph_items>
+                                <graph_item>
+                                    <drawtype>BOLD_LINE</drawtype>
+                                    <color>199C0D</color>
+                                    <item>
+                                        <host>Template AWS ECS cluster</host>
+                                        <key>ecs_stats.py[&quot;--metric&quot;,&quot;MemoryUtilization&quot;,&quot;--service-name&quot;,&quot;{#SERVICE}&quot;,&quot;--cluster-name&quot;,&quot;{$AWS_CLUSTER_NAME}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$REGION}&quot;]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                    </graph_prototypes>
+                </discovery_rule>
+            </discovery_rules>
+            <macros>
+                <macro>
+                    <macro>{$AWS_ACCESS_KEY}</macro>
+                </macro>
+                <macro>
+                    <macro>{$AWS_SECRET_KEY}</macro>
+                </macro>
+                <macro>
+                    <macro>{$REGION}</macro>
+                    <value>us-east-1</value>
+                </macro>
+            </macros>
+            <screens>
+                <screen>
+                    <name>res</name>
+                    <hsize>2</hsize>
+                    <vsize>2</vsize>
+                    <screen_items>
+                        <screen_item>
+                            <resourcetype>0</resourcetype>
+                            <style>0</style>
+                            <resource>
+                                <name>Cluster CPU Utilization</name>
+                                <host>Template AWS ECS cluster</host>
+                            </resource>
+                            <width>750</width>
+                            <height>200</height>
+                            <x>0</x>
+                            <y>0</y>
+                            <colspan>1</colspan>
+                            <rowspan>1</rowspan>
+                            <elements>0</elements>
+                            <valign>0</valign>
+                            <halign>0</halign>
+                            <dynamic>0</dynamic>
+                            <sort_triggers>0</sort_triggers>
+                            <url/>
+                            <application/>
+                            <max_columns>3</max_columns>
+                        </screen_item>
+                        <screen_item>
+                            <resourcetype>0</resourcetype>
+                            <style>0</style>
+                            <resource>
+                                <name>Cluster RAM Utilization</name>
+                                <host>Template AWS ECS cluster</host>
+                            </resource>
+                            <width>750</width>
+                            <height>200</height>
+                            <x>1</x>
+                            <y>0</y>
+                            <colspan>1</colspan>
+                            <rowspan>1</rowspan>
+                            <elements>0</elements>
+                            <valign>0</valign>
+                            <halign>0</halign>
+                            <dynamic>0</dynamic>
+                            <sort_triggers>0</sort_triggers>
+                            <url/>
+                            <application/>
+                            <max_columns>3</max_columns>
+                        </screen_item>
+                        <screen_item>
+                            <resourcetype>20</resourcetype>
+                            <style>0</style>
+                            <resource>
+                                <name>Service CPU Utilization for {#SERVICE}</name>
+                                <host>Template AWS ECS cluster</host>
+                            </resource>
+                            <width>750</width>
+                            <height>200</height>
+                            <x>0</x>
+                            <y>1</y>
+                            <colspan>1</colspan>
+                            <rowspan>1</rowspan>
+                            <elements>0</elements>
+                            <valign>0</valign>
+                            <halign>0</halign>
+                            <dynamic>0</dynamic>
+                            <sort_triggers>0</sort_triggers>
+                            <url/>
+                            <application/>
+                            <max_columns>1</max_columns>
+                        </screen_item>
+                        <screen_item>
+                            <resourcetype>20</resourcetype>
+                            <style>0</style>
+                            <resource>
+                                <name>Service RAM Utilization for {#SERVICE}</name>
+                                <host>Template AWS ECS cluster</host>
+                            </resource>
+                            <width>750</width>
+                            <height>200</height>
+                            <x>1</x>
+                            <y>1</y>
+                            <colspan>1</colspan>
+                            <rowspan>1</rowspan>
+                            <elements>0</elements>
+                            <valign>0</valign>
+                            <halign>0</halign>
+                            <dynamic>0</dynamic>
+                            <sort_triggers>0</sort_triggers>
+                            <url/>
+                            <application/>
+                            <max_columns>3</max_columns>
+                        </screen_item>
+                    </screen_items>
+                </screen>
+            </screens>
+        </template>
+    </templates>
+    <graphs>
+        <graph>
+            <name>Cluster CPU Utilization</name>
+            <ymin_type_1>FIXED</ymin_type_1>
+            <graph_items>
+                <graph_item>
+                    <drawtype>BOLD_LINE</drawtype>
+                    <color>199C0D</color>
+                    <item>
+                        <host>Template AWS ECS cluster</host>
+                        <key>ecs_stats.py[&quot;--metric&quot;,&quot;CPUReservation&quot;,&quot;--cluster-name&quot;,&quot;{$AWS_CLUSTER_NAME}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$REGION}&quot;]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <drawtype>GRADIENT_LINE</drawtype>
+                    <color>1E88E5</color>
+                    <item>
+                        <host>Template AWS ECS cluster</host>
+                        <key>ecs_stats.py[&quot;--metric&quot;,&quot;CPUUtilization&quot;,&quot;--cluster-name&quot;,&quot;{$AWS_CLUSTER_NAME}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$REGION}&quot;]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <name>Cluster RAM Utilization</name>
+            <ymin_type_1>FIXED</ymin_type_1>
+            <graph_items>
+                <graph_item>
+                    <drawtype>BOLD_LINE</drawtype>
+                    <color>199C0D</color>
+                    <item>
+                        <host>Template AWS ECS cluster</host>
+                        <key>ecs_stats.py[&quot;--metric&quot;,&quot;MemoryReservation&quot;,&quot;--cluster-name&quot;,&quot;{$AWS_CLUSTER_NAME}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$REGION}&quot;]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <drawtype>GRADIENT_LINE</drawtype>
+                    <color>1E88E5</color>
+                    <item>
+                        <host>Template AWS ECS cluster</host>
+                        <key>ecs_stats.py[&quot;--metric&quot;,&quot;MemoryUtilization&quot;,&quot;--cluster-name&quot;,&quot;{$AWS_CLUSTER_NAME}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$REGION}&quot;]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+    </graphs>
+</zabbix_export>
